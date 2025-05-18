@@ -6,6 +6,9 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final emailController = TextEditingController();
+    final passwordController = TextEditingController();
+
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
@@ -18,52 +21,39 @@ class LoginPage extends StatelessWidget {
                 const Text(
                   'Welcome to',
                   style: TextStyle(fontSize: 16, color: Colors.grey),
-                  textAlign: TextAlign.left,
                 ),
                 const Text(
                   'Unsplash Clone',
                   style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.left,
                 ),
                 const SizedBox(height: 12),
                 const Text(
                   'Silahkan login untuk melanjutkan.',
                   style: TextStyle(fontSize: 14, color: Colors.grey),
-                  textAlign: TextAlign.left,
                 ),
                 const SizedBox(height: 32),
                 TextField(
-                  cursorColor: Color.fromARGB(255, 41, 41, 41),
+                  controller: emailController,
                   decoration: InputDecoration(
                     labelText: 'Email',
-                    floatingLabelStyle: const TextStyle(
-                      color: Color.fromARGB(255, 41, 41, 41),
-                    ),
-                    border: OutlineInputBorder(),
+                    border: const OutlineInputBorder(),
                     focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color.fromARGB(255, 41, 41, 41),
-                      ),
+                      borderSide: BorderSide(color: Color.fromARGB(255, 41, 41, 41)),
                     ),
                   ),
                   keyboardType: TextInputType.emailAddress,
                 ),
                 const SizedBox(height: 16),
                 TextField(
-                  cursorColor: Color.fromARGB(255, 41, 41, 41),
+                  controller: passwordController,
+                  obscureText: true,
                   decoration: InputDecoration(
                     labelText: 'Password',
-                    floatingLabelStyle: const TextStyle(
-                      color: Color.fromARGB(255, 41, 41, 41),
-                    ),
-                    border: OutlineInputBorder(),
+                    border: const OutlineInputBorder(),
                     focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color.fromARGB(255, 41, 41, 41),
-                      ),
+                      borderSide: BorderSide(color: Color.fromARGB(255, 41, 41, 41)),
                     ),
                   ),
-                  obscureText: true,
                 ),
                 const SizedBox(height: 24),
                 SizedBox(
@@ -73,7 +63,21 @@ class LoginPage extends StatelessWidget {
                       backgroundColor: const Color.fromARGB(255, 41, 41, 41),
                     ),
                     onPressed: () {
-                      // Handle login logic here
+                      // final email = emailController.text.trim();
+                      // final password = passwordController.text.trim();
+
+                      // if (email.isNotEmpty && password.isNotEmpty) {
+                      //   Navigator.pushReplacement(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //       builder: (context) => const DashboardHome(),
+                      //     ),
+                      //   );
+                      // } else {
+                      //   ScaffoldMessenger.of(context).showSnackBar(
+                      //     const SnackBar(content: Text("Email dan Password harus diisi")),
+                      //   );
+                      // }
                     },
                     child: const Text(
                       'Login',
@@ -94,10 +98,7 @@ class LoginPage extends StatelessWidget {
                           ),
                         );
                       },
-                      child: const Text(
-                        'Daftar',
-                        style: TextStyle(color: Colors.black87),
-                      ),
+                      child: const Text('Daftar', style: TextStyle(color: Colors.black87)),
                     ),
                   ],
                 ),
