@@ -2,38 +2,38 @@ import 'package:flutter/material.dart';
 import 'package:unsplash_clone/components/item_card.dart';
 import 'package:unsplash_clone/providers/user_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:unsplash_clone/screens/cart.dart'; // Pastikan path ini sesuai struktur project kamu
+import 'package:unsplash_clone/screens/cart.dart';
 
 class HomePage extends StatelessWidget {
   final List<Map<String, dynamic>> items = [
     {
-      "title": "foto wisuda",
-      "desc": "photoshoot graduation with property",
+      "title": "Foto Wisuda",
+      "desc": "Photoshoot graduation with properties.",
       "price": 1200000,
     },
     {
-      "title": "foto wisuda malam",
-      "desc": "with the lamp and lens fish eye make your photo cool",
+      "title": "Foto Wisuda Malam",
+      "desc": "Dramatic night photoshoot with lamps and fisheye lens.",
       "price": 1500000,
     },
     {
-      "title": "photobox",
-      "desc": "With your someone love make a moment",
+      "title": "Photobox",
+      "desc": "Create sweet moments with your loved one.",
       "price": 800000,
     },
     {
-      "title": "photobooth",
-      "desc": "with your sister/friend make your moment",
+      "title": "Photobooth",
+      "desc": "Capture fun moments with friends or siblings.",
       "price": 800000,
     },
     {
-      "title": "foto studio",
-      "desc": "take a moment with your family",
+      "title": "Foto Studio",
+      "desc": "Take beautiful portraits with your family.",
       "price": 750000,
     },
     {
-      "title": "foto prewed",
-      "desc": "make your happy moment",
+      "title": "Foto Prewed",
+      "desc": "Make your pre-wedding memories unforgettable.",
       "price": 1200000,
     },
   ];
@@ -52,7 +52,7 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        toolbarHeight: 0, // Sembunyikan AppBar asli
+        toolbarHeight: 0,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -60,31 +60,33 @@ class HomePage extends StatelessWidget {
           children: [
             const SizedBox(height: 16),
 
-            // Baris 1: Icon profil
+            // Icon profil
             Align(
               alignment: Alignment.centerLeft,
               child: Icon(Icons.person, size: 30, color: Colors.black),
             ),
             const SizedBox(height: 12),
 
-            // Baris 2: Hello User + Icon keranjang + search
+            // Hello, user + keranjang + search
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Hello, ${user.displayName ?? user.email}',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                Expanded(
+                  child: Text(
+                    'Hello, ${user.displayName ?? user.email}',
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    overflow: TextOverflow.ellipsis, // Biar tidak overflow
                   ),
                 ),
                 Row(
                   children: [
                     IconButton(
-                      icon: Icon(Icons.shopping_bag_outlined),
+                      icon: const Icon(Icons.shopping_bag_outlined),
                       onPressed: () {
-                        // Navigasi ke halaman keranjang
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -95,7 +97,7 @@ class HomePage extends StatelessWidget {
                       color: Colors.black,
                     ),
                     IconButton(
-                      icon: Icon(Icons.search),
+                      icon: const Icon(Icons.search),
                       onPressed: () {},
                       color: Colors.black,
                     ),
