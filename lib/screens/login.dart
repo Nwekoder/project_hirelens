@@ -4,7 +4,7 @@ import 'package:unsplash_clone/models/user_model.dart';
 import 'package:unsplash_clone/providers/user_provider.dart';
 import 'package:unsplash_clone/screens/register.dart';
 import 'package:unsplash_clone/screens/home.dart';
-import 'package:unsplash_clone/utils//auth_storage.dart';
+import 'package:unsplash_clone/utils/auth_storage.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
@@ -19,12 +19,56 @@ class _LoginPageState extends State<LoginPage> {
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
+  bool _isCheckingSession = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkExistingSession();
+  }
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  // Cek apakah user sudah login sebelumnya (token tersimpan)
+  Future<void> _checkExistingSession() async {
+    final token = await getAuthToken();
+
+    if (token != null) {
+      try {
+        await Supabase.instance.client.auth.reauthenticate();
+        final user = Supabase.instance.client.auth.currentUser;
+
+        if (user != null && mounted) {
+          final userProvider = Provider.of<UserProvider>(
+            context,
+            listen: false,
+          );
+          userProvider.setUser(
+            UserModel(
+              id: user.id,
+              email: user.email ?? '',
+              displayName:
+                  user.userMetadata?['displayName'] ?? user.email ?? '',
+            ),
+          );
+
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (_) => const HomePage()),
+          );
+          return;
+        }
+      } catch (_) {
+        await clearAuthToken(); // Token invalid, hapus
+      }
+    }
+    if (mounted) {
+      setState(() => _isCheckingSession = false);
+    }
   }
 
   Future<void> _login() async {
@@ -42,17 +86,23 @@ class _LoginPageState extends State<LoginPage> {
         if (!mounted) return;
 
         await saveAuthToken(response.session!.accessToken);
+
         final user = UserModel(
           id: response.user!.id,
           email: response.user!.email ?? '',
+          displayName:
+              response.user!.userMetadata?['displayName'] ??
+              response.user!.email ??
+              '',
         );
+
         Provider.of<UserProvider>(context, listen: false).setUser(user);
 
         Navigator.of(
           context,
-        ).pushReplacement(MaterialPageRoute(builder: (_) => HomePage()));
+        ).pushReplacement(MaterialPageRoute(builder: (_) => const HomePage()));
       } else {
-        _showError('Login gagal. Silakan coba lagi.');
+        _showError('Login gagal. Silakan periksa kembali data Anda.');
       }
     } catch (e) {
       _showError('Terjadi kesalahan: ${e.toString()}');
@@ -81,6 +131,10 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isCheckingSession) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
@@ -139,6 +193,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(255, 41, 41, 41),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
                     onPressed: _isLoading ? null : _login,
                     child:

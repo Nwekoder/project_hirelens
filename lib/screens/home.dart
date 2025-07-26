@@ -5,7 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:unsplash_clone/screens/cart.dart';
 
 class HomePage extends StatelessWidget {
-  final List<Map<String, dynamic>> items = [
+  // Data item dijadikan const supaya HomePage bisa const
+  static const List<Map<String, dynamic>> items = [
     {
       "title": "Foto Wisuda",
       "desc": "Photoshoot graduation with properties.",
@@ -38,14 +39,16 @@ class HomePage extends StatelessWidget {
     },
   ];
 
-  HomePage({super.key});
+  const HomePage({super.key}); // Sudah bisa const
 
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context).user;
 
     if (user == null) {
-      return const Center(child: Text('Belum login'));
+      return const Scaffold(
+        body: Center(child: Text('Belum login')),
+      );
     }
 
     return Scaffold(
@@ -61,7 +64,7 @@ class HomePage extends StatelessWidget {
             const SizedBox(height: 16),
 
             // Icon profil
-            Align(
+            const Align(
               alignment: Alignment.centerLeft,
               child: Icon(Icons.person, size: 30, color: Colors.black),
             ),
@@ -121,9 +124,9 @@ class HomePage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final item = items[index];
                   return ItemCard(
-                    name: item['title'],
-                    price: item['price'],
-                    desc: item['desc'],
+                    name: item['title']!,
+                    price: item['price']!,
+                    desc: item['desc']!,
                   );
                 },
               ),
